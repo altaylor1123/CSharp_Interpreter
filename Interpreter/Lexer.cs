@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Interpreter;
 
 public class Lexer
@@ -19,7 +21,7 @@ public class Lexer
 		return lexer;
 	}
 
-	public void ReadChar()
+	private void ReadChar()
 	{
 		if (ReadPosition >= Input.Length)
 		{
@@ -35,22 +37,89 @@ public class Lexer
 
 	public Token NextToken()
 	{
+		SkipWhitespace();
+
 		Token tok = CurrentChar switch
 		{
-			'=' => new Token(new TokenType(TokenTypes.ASSIGN), CurrentChar.ToString()),
-			';' => new Token(new TokenType(TokenTypes.SEMICOLON), CurrentChar.ToString()),
-			'(' => new Token(new TokenType(TokenTypes.LPAREN), CurrentChar.ToString()),
-			')' => new Token(new TokenType(TokenTypes.RPAREN), CurrentChar.ToString()),
-			',' => new Token(new TokenType(TokenTypes.COMMA), CurrentChar.ToString()),
-			'+' => new Token(new TokenType(TokenTypes.PLUS), CurrentChar.ToString()),
-			'{' => new Token(new TokenType(TokenTypes.LBRACE), CurrentChar.ToString()),
-			'}' => new Token(new TokenType(TokenTypes.RBRACE), CurrentChar.ToString()),
-			'\0' => new Token(new TokenType(TokenTypes.EOF), ""),
-			_ => throw new ArgumentOutOfRangeException()
+			'=' => GetToken(TokenTypes.ASSIGN, CurrentChar.ToString()),
+			';' => GetToken(TokenTypes.SEMICOLON, CurrentChar.ToString()),
+			'(' => GetToken(TokenTypes.LPAREN, CurrentChar.ToString()),
+			')' => GetToken(TokenTypes.RPAREN, CurrentChar.ToString()),
+			',' => GetToken(TokenTypes.COMMA, CurrentChar.ToString()),
+			'+' => GetToken(TokenTypes.PLUS, CurrentChar.ToString()),
+			'{' => GetToken(TokenTypes.LBRACE, CurrentChar.ToString()),
+			'}' => GetToken(TokenTypes.RBRACE, CurrentChar.ToString()),
+			'\0' => GetToken(TokenTypes.EOF, ""),
+			_ when IsLetter(CurrentChar) => GetIdentToken(),
+			_ when IsDigit(CurrentChar) => GetNumberToken(),
+			_ => new Token(new TokenType(TokenTypes.ILLEGAL), CurrentChar.ToString())
 		};
 
-		ReadChar();
+		// ReadChar();
 		return tok;
 
+	}
+
+	private Token GetToken(string toktype, string tokString)
+	{
+		ReadChar();
+		var tokType = new TokenType(toktype);
+		var tokLiteral = tokString;
+		return new Token(tokType, tokLiteral);
+	}
+	private Token GetIdentToken()
+	{
+		var tokLiteral = ReadIdentifier();
+		var tokType = Token.LookupIdent(tokLiteral);
+		return new Token(tokType, tokLiteral);
+	}
+	private Token GetNumberToken()
+	{
+		var tokenType = new TokenType(TokenTypes.INT);
+		var tokLiteral = ReadNumber();
+		return new Token(tokenType, tokLiteral);
+	}
+
+	// reads in an identifier and advances the lexer's position until it encounters 
+	// a non-letter-character
+	private string ReadIdentifier()
+	{
+		var builder = new StringBuilder();
+		while (IsLetter(CurrentChar))
+		{
+			builder.Append(CurrentChar);
+			ReadChar();
+		}
+		return builder.ToString();
+	}
+
+	private string ReadNumber()
+	{
+		var builder = new StringBuilder();
+		while (IsDigit(CurrentChar))
+		{
+			builder.Append(CurrentChar);
+			ReadChar();
+		}
+		return builder.ToString();
+	}
+
+	// helper function checks whether given argument is a letter
+	private static bool IsLetter(char ch)
+	{
+		return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_';
+	}
+
+	private static bool IsDigit(char ch)
+	{
+		return '0' <= ch && ch <= '9';
+	}
+	// helper function common in parsers, eatWhitespace or consumeWhitespace
+	private void SkipWhitespace()
+	{
+		while (CurrentChar == ' ' || CurrentChar == '\t' || CurrentChar == '\r' || CurrentChar == '\n')
+		{
+			ReadChar();
+		}
 	}
 }

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Microsoft.VisualBasic;
+
 namespace Interpreter;
 
 public class Token
@@ -9,6 +12,20 @@ public class Token
 	{
 		Type = type;
 		Literal = literal;
+	}
+
+	readonly static Dictionary<string, TokenType> Keywords = new(){
+		{"fn", new TokenType(TokenTypes.FUNCTION)},
+		{"let", new TokenType(TokenTypes.LET)},
+	};
+
+	public static TokenType LookupIdent(string ident)
+	{
+		if (Keywords.ContainsKey(ident))
+		{
+			return Keywords[ident];
+		}
+		return new TokenType(TokenTypes.IDENT);
 	}
 }
 
