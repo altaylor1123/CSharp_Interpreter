@@ -43,6 +43,13 @@ public static class TokenTypes
 	//Operators
 	public static readonly string ASSIGN = "=";
 	public static readonly string PLUS = "+";
+	public static readonly string MINUS = "-";
+	public static readonly string BANG = "!";
+	public static readonly string ASTERISK = "*";
+	public static readonly string SLASH = "/";
+
+	public static readonly string LESSTHAN = "<";
+	public static readonly string GREATERTHAN = ">";
 
 	//Delimiters
 	public static readonly string COMMA = ",";

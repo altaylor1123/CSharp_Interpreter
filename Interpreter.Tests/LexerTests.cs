@@ -111,4 +111,40 @@ public class LexerTests
 		}
 
 	}
+
+	[Fact]
+	public void Lexer_GivenSingleSymbols_ReturnsCorrect()
+	{
+		//Arrange
+		string input = @"!-/*5;
+		5 < 10 > 5;
+		";
+
+		List<Expected> expectedResults = new() {
+			new Expected { expectedType = new TokenType(TokenTypes.BANG), expectedLiteral = "!" },
+			new Expected { expectedType = new TokenType(TokenTypes.MINUS), expectedLiteral = "-" },
+			new Expected { expectedType = new TokenType(TokenTypes.SLASH), expectedLiteral = "/" },
+			new Expected { expectedType = new TokenType(TokenTypes.ASTERISK), expectedLiteral = "*" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "5" },
+			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "5" },
+			new Expected { expectedType = new TokenType(TokenTypes.LESSTHAN), expectedLiteral = "<" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "10" },
+			new Expected { expectedType = new TokenType(TokenTypes.GREATERTHAN), expectedLiteral = ">" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "5" },
+			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			};
+
+		Lexer lex = Lexer.CreateFromInput(input);
+
+		//Act
+		foreach (Expected er in expectedResults)
+		{
+			var tok = lex.NextToken();
+			//Assert
+			tok.Type.ShouldBe(er.expectedType);
+			tok.Literal.ShouldBe(er.expectedLiteral);
+		}
+
+	}
 }

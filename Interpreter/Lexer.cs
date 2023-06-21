@@ -42,11 +42,17 @@ public class Lexer
 		Token tok = CurrentChar switch
 		{
 			'=' => GetToken(TokenTypes.ASSIGN, CurrentChar.ToString()),
+			'+' => GetToken(TokenTypes.PLUS, CurrentChar.ToString()),
+			'-' => GetToken(TokenTypes.MINUS, CurrentChar.ToString()),
+			'!' => GetToken(TokenTypes.BANG, CurrentChar.ToString()),
+			'/' => GetToken(TokenTypes.SLASH, CurrentChar.ToString()),
+			'*' => GetToken(TokenTypes.ASTERISK, CurrentChar.ToString()),
+			'<' => GetToken(TokenTypes.LESSTHAN, CurrentChar.ToString()),
+			'>' => GetToken(TokenTypes.GREATERTHAN, CurrentChar.ToString()),
 			';' => GetToken(TokenTypes.SEMICOLON, CurrentChar.ToString()),
 			'(' => GetToken(TokenTypes.LPAREN, CurrentChar.ToString()),
 			')' => GetToken(TokenTypes.RPAREN, CurrentChar.ToString()),
 			',' => GetToken(TokenTypes.COMMA, CurrentChar.ToString()),
-			'+' => GetToken(TokenTypes.PLUS, CurrentChar.ToString()),
 			'{' => GetToken(TokenTypes.LBRACE, CurrentChar.ToString()),
 			'}' => GetToken(TokenTypes.RBRACE, CurrentChar.ToString()),
 			'\0' => GetToken(TokenTypes.EOF, ""),
