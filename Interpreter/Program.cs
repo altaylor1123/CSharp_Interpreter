@@ -10,6 +10,6 @@ Lexer lex = Lexer.CreateFromInput(input);
 Token tok = lex.NextToken();
 while (tok.Type != new TokenType(TokenTypes.EOF))
 {
-	Console.WriteLine("Type: {0} Literal: {1}", tok.Type, tok.Literal);
+	Console.WriteLine("Type: {0} Literal: {1}", tok.Type.Value, tok.Literal);
 	tok = lex.NextToken();
 }
