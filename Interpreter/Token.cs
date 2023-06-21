@@ -56,6 +56,10 @@ public static class TokenTypes
 	public static readonly string LESSTHAN = "<";
 	public static readonly string GREATERTHAN = ">";
 
+	public static readonly string EQ = "==";
+	public static readonly string NOT_EQ = "!=";
+
+
 	//Delimiters
 	public static readonly string COMMA = ",";
 	public static readonly string SEMICOLON = ";";

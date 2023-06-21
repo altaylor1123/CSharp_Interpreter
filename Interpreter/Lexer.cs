@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 
 namespace Interpreter;
@@ -41,9 +42,12 @@ public class Lexer
 
 		Token tok = CurrentChar switch
 		{
+
+			'=' when PeekChar().Equals('=') => GetTwoCharToken(TokenTypes.EQ),
 			'=' => GetToken(TokenTypes.ASSIGN, CurrentChar.ToString()),
 			'+' => GetToken(TokenTypes.PLUS, CurrentChar.ToString()),
 			'-' => GetToken(TokenTypes.MINUS, CurrentChar.ToString()),
+			'!' when PeekChar().Equals('=') => GetTwoCharToken(TokenTypes.NOT_EQ),
 			'!' => GetToken(TokenTypes.BANG, CurrentChar.ToString()),
 			'/' => GetToken(TokenTypes.SLASH, CurrentChar.ToString()),
 			'*' => GetToken(TokenTypes.ASTERISK, CurrentChar.ToString()),
@@ -71,6 +75,16 @@ public class Lexer
 		ReadChar();
 		var tokType = new TokenType(toktype);
 		var tokLiteral = tokString;
+		return new Token(tokType, tokLiteral);
+	}
+
+	private Token GetTwoCharToken(string tokenType)
+	{
+		var ch = CurrentChar;
+		ReadChar();
+		var tokType = new TokenType(tokenType);
+		var tokLiteral = $"{ch}{CurrentChar}";
+		ReadChar();
 		return new Token(tokType, tokLiteral);
 	}
 	private Token GetIdentToken()
@@ -126,6 +140,18 @@ public class Lexer
 		while (CurrentChar == ' ' || CurrentChar == '\t' || CurrentChar == '\r' || CurrentChar == '\n')
 		{
 			ReadChar();
+		}
+	}
+
+	private char PeekChar()
+	{
+		if (ReadPosition >= Input.Length)
+		{
+			return '\0';
+		}
+		else
+		{
+			return Input[ReadPosition];
 		}
 	}
 }

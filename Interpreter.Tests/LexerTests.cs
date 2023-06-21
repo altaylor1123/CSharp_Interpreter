@@ -133,6 +133,7 @@ public class LexerTests
 			new Expected { expectedType = new TokenType(TokenTypes.GREATERTHAN), expectedLiteral = ">" },
 			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "5" },
 			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			new Expected { expectedType = new TokenType(TokenTypes.EOF), expectedLiteral = "" },
 			};
 
 		Lexer lex = Lexer.CreateFromInput(input);
@@ -177,7 +178,41 @@ public class LexerTests
 			new Expected { expectedType = new TokenType(TokenTypes.FALSE), expectedLiteral = "false" },
 			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
 			new Expected { expectedType = new TokenType(TokenTypes.RBRACE), expectedLiteral = "}" },
+			new Expected { expectedType = new TokenType(TokenTypes.EOF), expectedLiteral = "" },
 			};
+
+		Lexer lex = Lexer.CreateFromInput(input);
+
+		//Act
+		foreach (Expected er in expectedResults)
+		{
+			var tok = lex.NextToken();
+			//Assert
+			tok.Type.ShouldBe(er.expectedType);
+			tok.Literal.ShouldBe(er.expectedLiteral);
+		}
+
+	}
+
+	[Fact]
+	public void Lexer_GivenCompoundSymbols_ReturnsCorrect()
+	{
+		//Arrange
+		string input = @"10 == 10;
+		10 != 9;
+		";
+
+		List<Expected> expectedResults = new() {
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "10" },
+			new Expected { expectedType = new TokenType(TokenTypes.EQ), expectedLiteral = "==" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "10" },
+			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "10" },
+			new Expected { expectedType = new TokenType(TokenTypes.NOT_EQ), expectedLiteral = "!=" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "9" },
+			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			new Expected { expectedType = new TokenType(TokenTypes.EOF), expectedLiteral = "" },
+		};
 
 		Lexer lex = Lexer.CreateFromInput(input);
 
