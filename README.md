@@ -17,8 +17,8 @@ As described in the book, Monkey languge has the following:
 
 The interpreter will have a few major parts:
 
-- the lexer 🚧
-- the parser
+- the lexer ✔️
+- the parser 🚧
 - the Abstract Syntax Tree (AST)
 - the internal object system
 - the evaluator
