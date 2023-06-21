@@ -17,6 +17,11 @@ public class Token
 	readonly static Dictionary<string, TokenType> Keywords = new(){
 		{"fn", new TokenType(TokenTypes.FUNCTION)},
 		{"let", new TokenType(TokenTypes.LET)},
+		{"true", new TokenType(TokenTypes.TRUE)},
+		{"false", new TokenType(TokenTypes.FALSE)},
+		{"if", new TokenType(TokenTypes.IF)},
+		{"else", new TokenType(TokenTypes.ELSE)},
+		{"return", new TokenType(TokenTypes.RETURN)},
 	};
 
 	public static TokenType LookupIdent(string ident)
@@ -63,4 +68,9 @@ public static class TokenTypes
 	//Keywords
 	public static readonly string FUNCTION = "FUNCTION";
 	public static readonly string LET = "LET";
+	public static readonly string TRUE = "TRUE";
+	public static readonly string FALSE = "FALSE";
+	public static readonly string IF = "IF";
+	public static readonly string ELSE = "ELSE";
+	public static readonly string RETURN = "RETURN";
 }

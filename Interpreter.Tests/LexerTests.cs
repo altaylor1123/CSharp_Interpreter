@@ -147,4 +147,48 @@ public class LexerTests
 		}
 
 	}
+
+	[Fact]
+	public void Lexer_GivenKeywords_ReturnsCorrect()
+	{
+		//Arrange
+		string input = @"if (5 < 10) {
+			return true;
+		} else {
+			return false;
+		}
+		";
+
+		List<Expected> expectedResults = new() {
+			new Expected { expectedType = new TokenType(TokenTypes.IF), expectedLiteral = "if" },
+			new Expected { expectedType = new TokenType(TokenTypes.LPAREN), expectedLiteral = "(" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "5" },
+			new Expected { expectedType = new TokenType(TokenTypes.LESSTHAN), expectedLiteral = "<" },
+			new Expected { expectedType = new TokenType(TokenTypes.INT), expectedLiteral = "10" },
+			new Expected { expectedType = new TokenType(TokenTypes.RPAREN), expectedLiteral = ")" },
+			new Expected { expectedType = new TokenType(TokenTypes.LBRACE), expectedLiteral = "{" },
+			new Expected { expectedType = new TokenType(TokenTypes.RETURN), expectedLiteral = "return" },
+			new Expected { expectedType = new TokenType(TokenTypes.TRUE), expectedLiteral = "true" },
+			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			new Expected { expectedType = new TokenType(TokenTypes.RBRACE), expectedLiteral = "}" },
+			new Expected { expectedType = new TokenType(TokenTypes.ELSE), expectedLiteral = "else" },
+			new Expected { expectedType = new TokenType(TokenTypes.LBRACE), expectedLiteral = "{" },
+			new Expected { expectedType = new TokenType(TokenTypes.RETURN), expectedLiteral = "return" },
+			new Expected { expectedType = new TokenType(TokenTypes.FALSE), expectedLiteral = "false" },
+			new Expected { expectedType = new TokenType(TokenTypes.SEMICOLON), expectedLiteral = ";" },
+			new Expected { expectedType = new TokenType(TokenTypes.RBRACE), expectedLiteral = "}" },
+			};
+
+		Lexer lex = Lexer.CreateFromInput(input);
+
+		//Act
+		foreach (Expected er in expectedResults)
+		{
+			var tok = lex.NextToken();
+			//Assert
+			tok.Type.ShouldBe(er.expectedType);
+			tok.Literal.ShouldBe(er.expectedLiteral);
+		}
+
+	}
 }
